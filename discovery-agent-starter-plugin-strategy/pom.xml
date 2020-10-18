@@ -4,7 +4,7 @@
     <artifactId>discovery-agent-starter-plugin-strategy</artifactId>
     <name>Nepxion Discovery Agent Starter Plugin Strategy</name>
     <modelVersion>4.0.0</modelVersion>
-    <description>Nepxion Discovery is an enhancement for Spring Cloud Discovery</description>
+    <description>Nepxion Discovery Agent is a java agent to resolve loss of ThreadLocal in cross-thread scenario</description>
     <url>http://www.nepxion.com</url>
 
     <parent>
