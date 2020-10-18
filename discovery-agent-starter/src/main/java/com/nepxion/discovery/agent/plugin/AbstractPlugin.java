@@ -25,31 +25,24 @@ public abstract class AbstractPlugin extends Plugin {
 
     @Override
     public void install(TransformTemplate transformTemplate) {
-        boolean isEnabled = isEnabled();
-        if (isEnabled) {
-            String matcherClassName = getMatcherClassName();
-            Class<? extends AbstractPlugin> pluginClass = getClass();
+        String matcherClassName = getMatcherClassName();
+        Class<? extends AbstractPlugin> pluginClass = getClass();
 
-            ClassMatcher classMatcher = MatcherFactory.newClassNameMatcher(matcherClassName);
-            transformTemplate.transform(classMatcher, new TransformCallback() {
-                @Override
-                public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
-                    try {
-                        String hookClassName = getHookClassName();
+        ClassMatcher classMatcher = MatcherFactory.newClassNameMatcher(matcherClassName);
+        transformTemplate.transform(classMatcher, new TransformCallback() {
+            @Override
+            public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
+                try {
+                    String hookClassName = getHookClassName();
 
-                        ThreadLocalCopier.register(AgentClassLoader.load((URLClassLoader) pluginClass.getClassLoader(), classLoader, hookClassName));
-                    } catch (Exception e) {
-                        LOG.warn(String.format("Load %s error", className), e);
-                    }
-
-                    return null;
+                    ThreadLocalCopier.register(AgentClassLoader.load((URLClassLoader) pluginClass.getClassLoader(), classLoader, hookClassName));
+                } catch (Exception e) {
+                    LOG.warn(String.format("Load %s error", className), e);
                 }
-            });
-        }
-    }
 
-    protected boolean isEnabled() {
-        return true;
+                return null;
+            }
+        });
     }
 
     protected abstract String getMatcherClassName();

@@ -13,4 +13,8 @@ import com.nepxion.discovery.agent.callback.TransformTemplate;
 
 public abstract class Plugin {
     public abstract void install(TransformTemplate transformTemplate);
+
+    protected boolean isEnabled() {
+        return true;
+    }
 }
