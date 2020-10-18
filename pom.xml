@@ -13,6 +13,7 @@
     <modules>
         <module>discovery-agent-starter</module>
         <module>discovery-agent-starter-plugin-strategy</module>
+        <module>discovery-agent-starter-plugin-mdc</module>
     </modules>
 
     <properties>
@@ -32,6 +33,12 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>discovery-agent-starter-plugin-strategy</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>discovery-agent-starter-plugin-mdc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
