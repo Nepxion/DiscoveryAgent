@@ -341,5 +341,4 @@ public class MyApplication {
 完整示例，请参考[https://github.com/Nepxion/DiscoveryAgentGuide](https://github.com/Nepxion/DiscoveryAgentGuide)。上述自定义插件的方式，即可解决使用者在线程切换时丢失ThreadLocal上下文的问题
 
 ## Star走势图
-
 [![Stargazers over time](https://starchart.cc/Nepxion/Discovery.svg)](https://starchart.cc/Nepxion/Discovery)
