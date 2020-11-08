@@ -14,6 +14,7 @@
         <module>discovery-agent-starter</module>
         <module>discovery-agent-starter-plugin-strategy</module>
         <module>discovery-agent-starter-plugin-mdc</module>
+        <module>discovery-agent-example</module>
     </modules>
 
     <properties>
