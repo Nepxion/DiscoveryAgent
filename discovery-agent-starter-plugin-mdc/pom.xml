@@ -4,7 +4,7 @@
     <artifactId>discovery-agent-starter-plugin-mdc</artifactId>
     <name>Nepxion Discovery Agent Starter Plugin MDC</name>
     <modelVersion>4.0.0</modelVersion>
-    <description>Nepxion Discovery Agent is a java agent to resolve loss of ThreadLocal in cross-thread scenario</description>
+    <description>Nepxion Discovery Agent is a java agent to resolve loss of ThreadLocal in cross-thread scenario, such as Spring Async、Hystrix Thread、Runnable、Callable、Single Thread、Thread Pool、MDC</description>
     <url>http://www.nepxion.com</url>
 
     <parent>
