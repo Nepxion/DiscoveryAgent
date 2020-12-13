@@ -44,6 +44,7 @@ public class ServiceStrategyContextHook extends AbstractThreadLocalHook {
 
             if (objects[0] instanceof RequestAttributes) {
                 RestStrategyContext.getCurrentContext().setRequestAttributes((RequestAttributes) objects[0]);
+                RequestContextHolder.setRequestAttributes((RequestAttributes) objects[0]);
             }
             if (objects[1] instanceof Map) {
                 RpcStrategyContext.getCurrentContext().setAttributes((Map<String, Object>) objects[1]);
