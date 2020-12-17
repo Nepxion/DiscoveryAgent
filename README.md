@@ -119,10 +119,13 @@ ThreadLocal的作用是提供线程内的局部变量，在多线程环境下访
 ### 插件使用
 - discovery-agent-starter-`$`{discovery.version}.jar为Agent引导启动程序，JVM启动时进行加载；discovery-agent/plugin目录包含discovery-agent-starter-plugin-strategy-`$`{discovery.version}.jar为Nepxion Discovery自带的实现方案，业务系统可以自定义plugin，解决业务自己定义的上下文跨线程传递
 - 通过如下-javaagent启动，基本格式，如下
+
 ```
 -javaagent:/discovery-agent/discovery-agent-starter-${discovery.agent.version}.jar -Dthread.scan.packages=com.abc;com.xyz
 ```
+
 例如
+
 ```
 -javaagent:C:/opt/discovery-agent/discovery-agent-starter-${discovery.agent.version}.jar -Dthread.scan.packages=org.springframework.aop.interceptor;com.netflix.hystrix;com.nepxion.discovery.guide.service.feign
 ```
@@ -146,6 +149,7 @@ ThreadLocal的作用是提供线程内的局部变量，在多线程环境下访
 ① SDK侧工作
 
 - 新建ThreadLocal上下文类
+
 ```java
 public class MyContext {
     private static final ThreadLocal<MyContext> THREAD_LOCAL = new ThreadLocal<MyContext>() {
@@ -178,6 +182,7 @@ public class MyContext {
 ② Agent侧工作
 
 - 新建一个模块，引入如下依赖
+
 ```xml
 <dependency>
     <groupId>com.nepxion</groupId>
@@ -188,6 +193,7 @@ public class MyContext {
 ```
 
 - 新建一个ThreadLocalHook类继承AbstractThreadLocalHook
+
 ```java
 public class MyContextHook extends AbstractThreadLocalHook {
     @Override
@@ -213,6 +219,7 @@ public class MyContextHook extends AbstractThreadLocalHook {
 ```
 
 - 新建一个Plugin类继承AbstractPlugin
+
 ```java
 public class MyContextPlugin extends AbstractPlugin {
     private Boolean threadMyPluginEnabled = Boolean.valueOf(System.getProperty("thread.myplugin.enabled", "false"));
@@ -251,6 +258,7 @@ com.nepxion.discovery.example.agent.MyContextPlugin
 - 执行Maven编译，把编译后的包放在discovery-agent/plugin目录下
 
 - 给服务增加启动参数并启动，如下
+
 ```
 -javaagent:C:/opt/discovery-agent/discovery-agent-starter-${discovery.agent.version}.jar -Dthread.scan.packages=com.nepxion.discovery.example.application -Dthread.myplugin.enabled=true
 ```
@@ -258,6 +266,7 @@ com.nepxion.discovery.example.agent.MyContextPlugin
 ③ Application侧工作
 
 - 执行MyApplication，它模拟在主线程ThreadLocal放入Map数据，子线程通过DiscoveryAgent获取到该Map数据，并打印出来
+
 ```java
 @SpringBootApplication
 @RestController
