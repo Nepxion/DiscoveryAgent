@@ -127,12 +127,13 @@ ThreadLocal的作用是提供线程内的局部变量，在多线程环境下访
 例如
 
 ```
--javaagent:C:/opt/discovery-agent/discovery-agent-starter-${discovery.agent.version}.jar -Dthread.scan.packages=org.springframework.aop.interceptor;com.netflix.hystrix;com.nepxion.discovery.guide.service.feign
+-javaagent:C:/opt/discovery-agent/discovery-agent-starter-${discovery.agent.version}.jar -Dthread.scan.packages=reactor.core.scheduler;org.springframework.aop.interceptor;com.netflix.hystrix;com.nepxion.discovery.guide.service.feign
 ```
 
 参数说明
 - /discovery-agent：Agent所在的目录，需要对应到实际的目录上
-- `-D`thread.scan.packages：Runnable，Callable对象所在的扫描目录，该目录下的Runnable，Callable对象都会被装饰。该目录最好精细和准确，这样可以减少被装饰的对象数，提高性能，目录如果有多个，用“;”分隔。该参数只作用于服务侧，网关侧不需要加。参数定义为
+- `-D`thread.scan.packages：Runnable，Callable对象所在的扫描目录，该目录下的Runnable，Callable对象都会被装饰。该目录最好精细和准确，这样可以减少被装饰的对象数，提高性能，目录如果有多个，用“;”分隔。参数定义为
+    - WebFlux Reactor异步场景下的扫描目录对应为reactor.core.scheduler，可以解决基于Reactor的Spring Cloud LoadBalancer异步负载均衡下的上下文传递
     - `@`Async场景下的扫描目录对应为org.springframework.aop.interceptor
     - Hystrix线程池隔离场景下的扫描目录对应为com.netflix.hystrix
     - 线程，线程池的扫描目录对应为自定义Runnable，Callable对象所在类的目录
