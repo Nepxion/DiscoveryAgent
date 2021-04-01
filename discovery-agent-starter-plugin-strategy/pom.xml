@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <discovery.version>6.7.0</discovery.version>
+        <discovery.version>6.8.0</discovery.version>
 
         <agent.package.dest.dir>${project.build.directory}/../../discovery-agent</agent.package.dest.dir>
         <plugin.dest.dir>${agent.package.dest.dir}/plugin</plugin.dest.dir>
