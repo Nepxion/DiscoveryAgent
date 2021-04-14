@@ -27,6 +27,7 @@ public class StringUtil {
         if (isEmpty(string)) {
             return Collections.emptyList();
         }
+
         StringTokenizer st = new StringTokenizer(string, delimiters);
         List<String> tokens = new ArrayList<String>();
         while (st.hasMoreTokens()) {
