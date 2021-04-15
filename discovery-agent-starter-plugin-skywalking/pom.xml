@@ -16,6 +16,7 @@
 
     <properties>
         <discovery.version>6.9.0</discovery.version>
+        <skywalking.version>8.5.0</skywalking.version>
 
         <agent.package.dest.dir>${project.build.directory}/../../discovery-agent</agent.package.dest.dir>
         <plugin.dest.dir>${agent.package.dest.dir}/plugin</plugin.dest.dir>
@@ -26,6 +27,20 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>discovery-plugin-strategy-starter</artifactId>
             <version>${discovery.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>discovery-plugin-strategy-starter</artifactId>
+            <version>${discovery.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-agent-core</artifactId>
+            <version>${skywalking.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
