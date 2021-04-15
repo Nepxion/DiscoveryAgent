@@ -13,6 +13,7 @@
     <modules>
         <module>discovery-agent-starter</module>
         <module>discovery-agent-starter-plugin-strategy</module>
+        <module>discovery-agent-starter-plugin-skywalking</module>
         <module>discovery-agent-starter-plugin-mdc</module>
         <module>discovery-agent-example</module>
     </modules>
@@ -34,6 +35,12 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>discovery-agent-starter-plugin-strategy</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>discovery-agent-starter-plugin-skywalking</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
