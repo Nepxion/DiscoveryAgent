@@ -2,9 +2,10 @@
 
 ![](http://nepxion.gitee.io/docs/discovery-doc/Banner.png)
 
-# Discovery【探索】微服务企业级解决方案 · DiscoveryAgent快速入门
+# Discovery【探索】微服务企业级解决方案
 
-## 简介
+## DiscoveryAgent快速入门
+
 ThreadLocal的作用是提供线程内的局部变量，在多线程环境下访问时能保证各个线程内的ThreadLocal变量各自独立。在异步场景下，由于出现线程切换的问题，例如主线程切换到子线程，会导致线程ThreadLocal上下文丢失。DiscoveryAgent通过Java Agent方式解决这些痛点
 
 涵盖所有Java框架的异步场景，解决如下8个异步场景下丢失线程ThreadLocal上下文的问题
@@ -17,21 +18,7 @@ ThreadLocal的作用是提供线程内的局部变量，在多线程环境下访
 - Thread Pool
 - SLF4J MDC
 
-## 目录
-- [简介](#简介)
-- [请联系我](#请联系我)
-- [异步跨线程Agent](#异步跨线程Agent)
-    - [插件获取](#插件获取)
-    - [插件使用](#插件使用)
-    - [插件扩展](#插件扩展)
-- [Star走势图](#Star走势图)
-
-## 请联系我
-微信、钉钉、公众号和文档
-
-![](http://nepxion.gitee.io/docs/zxing-doc/微信-1.jpg)![](http://nepxion.gitee.io/docs/zxing-doc/钉钉-1.jpg)![](http://nepxion.gitee.io/docs/zxing-doc/公众号-1.jpg)![](http://nepxion.gitee.io/docs/zxing-doc/文档-1.jpg)
-
-## 异步跨线程Agent
+ 异步跨线程Agent
 
 ### 插件获取
 插件获取方式有两种方式
@@ -313,6 +300,3 @@ public class MyApplication {
 ```
 
 完整示例，请参考[https://github.com/Nepxion/DiscoveryAgent/tree/master/discovery-agent-example](https://github.com/Nepxion/DiscoveryAgent/tree/master/discovery-agent-example)。上述自定义插件的方式，即可解决使用者在线程切换时丢失ThreadLocal上下文的问题
-
-## Star走势图
-[![Stargazers over time](https://starchart.cc/Nepxion/Discovery.svg)](https://starchart.cc/Nepxion/Discovery)
