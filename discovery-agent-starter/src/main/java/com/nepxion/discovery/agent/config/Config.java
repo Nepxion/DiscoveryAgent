@@ -1,7 +1,14 @@
 package com.nepxion.discovery.agent.config;
 
-import com.nepxion.discovery.agent.logger.AgentLogger;
-import com.nepxion.discovery.agent.plugin.AgentPath;
+/**
+ * <p>Title: Nepxion Discovery</p>
+ * <p>Description: Nepxion Discovery</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
+ * <p>Company: Nepxion</p>
+ * @author zifeihan
+ * @version 1.0
+ */
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,18 +16,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-/**
- * <p>Title: Nepxion Discovery</p>
- * <p>Description: Nepxion Discovery</p>
- * <p>Copyright: Copyright (c) 2017-2050</p>
- * <p>Company: Nepxion</p>
- *
- * @author zifeihan
- * @version 1.0
- */
+import com.nepxion.discovery.agent.logger.AgentLogger;
+import com.nepxion.discovery.agent.plugin.AgentPath;
 
 public enum Config {
-
     INSTANCE;
 
     private static AgentLogger LOGGER = AgentLogger.getLogger(Config.class.getName());
@@ -29,10 +28,11 @@ public enum Config {
 
     public void initializeCoreConfig() {
         config = new Properties();
+
         try (final InputStreamReader configFileStream = loadConfig()) {
             config.load(configFileStream);
         } catch (Exception e) {
-            LOGGER.warn("Failed to read the config file, will ignore config file.");
+            LOGGER.warn("Failed to read the config file, will ignore config file");
         }
     }
 
@@ -48,13 +48,15 @@ public enum Config {
                 throw new ConfigNotFoundException("Failed to load agent.config", e);
             }
         }
-        throw new ConfigNotFoundException("Failed to load agent.config.");
+
+        throw new ConfigNotFoundException("Failed to load agent.config");
     }
 
     public Properties getConfig() {
         if (null == config) {
             initializeCoreConfig();
         }
+
         return config;
     }
 }
