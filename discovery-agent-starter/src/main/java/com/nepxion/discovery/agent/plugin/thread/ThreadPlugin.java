@@ -47,7 +47,9 @@ public class ThreadPlugin extends Plugin {
         if (StringUtil.isEmpty(threadScanPackages)) {
             LOG.warn(String.format("Custom Thread scan packages (%s) is null, ignore custom thread context switch", ThreadConstant.THREAD_SCAN_PACKAGES));
         }
+
         LOG.info(String.format("Trace (%s) (%s) Runnable/Callable for thread context switch", baseThreadScanPackages, threadScanPackages));
+
         List<String> basePackages = StringUtil.tokenizeToStringList(baseThreadScanPackages, ThreadConstant.THREAD_SCAN_PACKAGES_DELIMITERS);
         List<String> customPackages = StringUtil.tokenizeToStringList(threadScanPackages, ThreadConstant.THREAD_SCAN_PACKAGES_DELIMITERS);
         basePackages.addAll(customPackages);
@@ -72,11 +74,7 @@ public class ThreadPlugin extends Plugin {
 
     public static class RunnableTransformCallback implements TransformCallback {
         @Override
-        public byte[] doInTransform(ClassLoader classLoader,
-                String className,
-                Class<?> classBeingRedefined,
-                ProtectionDomain protectionDomain,
-                byte[] classfileBuffer) {
+        public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
             try {
                 ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
                 CtClass ctClass = classInfo.getCtClass();
