@@ -88,6 +88,7 @@
                                 <mkdir dir="${project.basedir}/../discovery-agent"/>
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar" tofile="${project.basedir}/../discovery-agent/${project.build.finalName}.jar" overwrite="true"/>
                                 <mkdir dir="${project.basedir}/../discovery-agent/plugin"/>
+                                <copy file="${project.basedir}/src/main/resources/agent.config" tofile="${project.basedir}/../discovery-agent/agent.config" overwrite="true"/>
                             </tasks>
                         </configuration>
                     </execution>

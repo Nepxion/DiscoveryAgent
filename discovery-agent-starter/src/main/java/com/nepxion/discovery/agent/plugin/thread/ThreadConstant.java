@@ -13,6 +13,8 @@ import com.nepxion.discovery.agent.plugin.thread.interceptor.ThreadCallIntercept
 import com.nepxion.discovery.agent.plugin.thread.interceptor.ThreadConstructorInterceptor;
 
 public class ThreadConstant {
+
+    public static final String BASE_THREAD_SCAN_PACKAGES = "agent.plugin.thread.scan.packages";
     public static final String THREAD_SCAN_PACKAGES = "thread.scan.packages";
     public static final String THREAD_REQUEST_DECORATOR_ENABLED = "thread.request.decorator.enabled";
     public static final String RUNNABLE_CLASS_NAME = "java.lang.Runnable";

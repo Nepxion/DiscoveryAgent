@@ -5,10 +5,14 @@ package com.nepxion.discovery.agent.plugin.thread;
  * <p>Description: Nepxion Discovery</p>
  * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
+ *
  * @author zifeihan
  * @version 1.0
  */
 
+import com.nepxion.discovery.agent.config.Config;
+import java.util.HashSet;
+import java.util.Properties;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
@@ -34,19 +38,41 @@ public class ThreadPlugin extends Plugin {
 
     @Override
     public void install(TransformTemplate transformTemplate) {
+        Properties baseConfig = Config.INSTANCE.getConfig();
+        String baseThreadScanPackages = baseConfig.getProperty(ThreadConstant.BASE_THREAD_SCAN_PACKAGES);
+        if (StringUtil.isEmpty(baseThreadScanPackages)) {
+            LOG.warn(String.format(
+                "Base Thread scan packages (%s) is null, ignore base thread context switch",
+                ThreadConstant.BASE_THREAD_SCAN_PACKAGES
+            ));
+        }
+
         String threadScanPackages = System.getProperty(ThreadConstant.THREAD_SCAN_PACKAGES);
         if (StringUtil.isEmpty(threadScanPackages)) {
-            LOG.warn(String.format("Thread scan packages (%s) is null, ignore thread context switch", ThreadConstant.THREAD_SCAN_PACKAGES));
-
+            LOG.warn(String.format(
+                "Custom Thread scan packages (%s) is null, ignore custom thread context switch",
+                ThreadConstant.THREAD_SCAN_PACKAGES
+            ));
+        }
+        LOG.info(String.format("Trace (%s) (%s) Runnable/Callable for thread context switch", baseThreadScanPackages, threadScanPackages));
+        List<String> basePackages = StringUtil.tokenizeToStringList(
+            baseThreadScanPackages, ThreadConstant.THREAD_SCAN_PACKAGES_DELIMITERS);
+        List<String> customPackages = StringUtil.tokenizeToStringList(
+            threadScanPackages, ThreadConstant.THREAD_SCAN_PACKAGES_DELIMITERS);
+        basePackages.addAll(customPackages);
+        HashSet<String> scanPackages = new HashSet<>();
+        scanPackages.addAll(basePackages);
+        scanPackages.addAll(customPackages);
+        if (scanPackages.isEmpty()) {
             return;
         }
-        LOG.info(String.format("Trace (%s) Runnable/Callable for thread context switch", threadScanPackages));
-        List<String> basePackages = StringUtil.tokenizeToStringList(threadScanPackages, ThreadConstant.THREAD_SCAN_PACKAGES_DELIMITERS);
         RunnableTransformCallback runnableTransformCallback = new RunnableTransformCallback();
         CallableTransformCallback callableTransformCallback = new CallableTransformCallback();
-        for (String basePackage : basePackages) {
-            MatcherOperator runnableInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(basePackage, ThreadConstant.RUNNABLE_CLASS_NAME);
-            MatcherOperator callableInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(basePackage, ThreadConstant.CALLABLE_CLASS_NAME);
+        for (String basePackage : scanPackages) {
+            MatcherOperator runnableInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(
+                basePackage, ThreadConstant.RUNNABLE_CLASS_NAME);
+            MatcherOperator callableInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(
+                basePackage, ThreadConstant.CALLABLE_CLASS_NAME);
             transformTemplate.transform(runnableInterfaceMatcherOperator, runnableTransformCallback);
             transformTemplate.transform(callableInterfaceMatcherOperator, callableTransformCallback);
         }
@@ -55,7 +81,11 @@ public class ThreadPlugin extends Plugin {
 
     public static class RunnableTransformCallback implements TransformCallback {
         @Override
-        public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
+        public byte[] doInTransform(ClassLoader classLoader,
+                                    String className,
+                                    Class<?> classBeingRedefined,
+                                    ProtectionDomain protectionDomain,
+                                    byte[] classfileBuffer) {
             try {
                 ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
                 CtClass ctClass = classInfo.getCtClass();
@@ -90,7 +120,8 @@ public class ThreadPlugin extends Plugin {
 
             Method[] methods = clazz.getDeclaredMethods();
             if (methods.length != 2) {
-                throw new RuntimeException("accessorType has to declare 2 methods. " + clazz.getName() + " has " + methods.length + ".");
+                throw new RuntimeException(
+                    "accessorType has to declare 2 methods. " + clazz.getName() + " has " + methods.length + ".");
             }
 
             Method getter;
@@ -111,8 +142,12 @@ public class ThreadPlugin extends Plugin {
             CtField f1 = CtField.make(field, ctClass);
             ctClass.addField(f1);
 
-            String getMethod = String.format("public %s %s(){return %s;}", fieldType.getName(), getter.getName(), fieldName);
-            String setMethod = String.format("public void %s(%s %s){this.%s = %s;}", setter.getName(), fieldType.getName(), fieldName, fieldName, fieldName);
+            String getMethod = String.format(
+                "public %s %s(){return %s;}", fieldType.getName(), getter.getName(), fieldName);
+            String setMethod = String.format(
+                "public void %s(%s %s){this.%s = %s;}", setter.getName(), fieldType.getName(), fieldName, fieldName,
+                fieldName
+            );
 
             CtMethod m1 = CtMethod.make(getMethod, ctClass);
             CtMethod m2 = CtMethod.make(setMethod, ctClass);
@@ -125,7 +160,11 @@ public class ThreadPlugin extends Plugin {
 
     public static class CallableTransformCallback implements TransformCallback {
         @Override
-        public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
+        public byte[] doInTransform(ClassLoader classLoader,
+                                    String className,
+                                    Class<?> classBeingRedefined,
+                                    ProtectionDomain protectionDomain,
+                                    byte[] classfileBuffer) {
             try {
                 ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
                 CtClass ctClass = classInfo.getCtClass();
