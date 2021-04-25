@@ -144,11 +144,7 @@ public class ThreadPlugin extends Plugin {
 
     public static class CallableTransformCallback implements TransformCallback {
         @Override
-        public byte[] doInTransform(ClassLoader classLoader,
-                String className,
-                Class<?> classBeingRedefined,
-                ProtectionDomain protectionDomain,
-                byte[] classfileBuffer) {
+        public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
             try {
                 ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
                 CtClass ctClass = classInfo.getCtClass();
