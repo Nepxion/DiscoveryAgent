@@ -27,6 +27,13 @@ public class WrapCallable<T> implements AsyncContextAccessor, Callable<T> {
 
     @Override
     public T call() throws Exception {
+
+        //Avoid calling in the same thread.
+        if (asyncContext.getOriginThread().equals(Thread.currentThread())) {
+            return callable.call();
+        }
+
+        //Call the original method and copy some objects held by ThreadLocal.
         Object[] objects = asyncContext.getObjects();
         ThreadLocalCopier.before(objects);
         try {

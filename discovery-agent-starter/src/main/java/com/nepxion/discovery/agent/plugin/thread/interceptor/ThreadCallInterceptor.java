@@ -21,6 +21,10 @@ public class ThreadCallInterceptor {
             if (null == asyncContext) {
                 return;
             }
+            //Avoid calling in the same thread.
+            if (asyncContext.getOriginThread().equals(Thread.currentThread())) {
+                return;
+            }
             Object[] objects = asyncContext.getObjects();
             ThreadLocalCopier.before(objects);
         }
@@ -28,6 +32,15 @@ public class ThreadCallInterceptor {
 
     public static void after(Object object) {
         if (object instanceof AsyncContextAccessor) {
+            AsyncContextAccessor asyncContextAccessor = (AsyncContextAccessor) object;
+            AsyncContext asyncContext = asyncContextAccessor.getAsyncContext();
+            if (null == asyncContext) {
+                return;
+            }
+            //Avoid calling in the same thread.
+            if (asyncContext.getOriginThread().equals(Thread.currentThread())) {
+                return;
+            }
             ThreadLocalCopier.after();
         }
     }

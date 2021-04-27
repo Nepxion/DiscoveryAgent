@@ -12,11 +12,21 @@ package com.nepxion.discovery.agent.async;
 public class AsyncContext {
     private Object[] objects;
 
+    /**
+     * Record the original thread and compare it with the thread that called runnable/callable.
+     */
+    private Thread originThread;
+
     public AsyncContext(Object[] objects) {
         this.objects = objects;
+        this.originThread = Thread.currentThread();
     }
 
     public Object[] getObjects() {
         return objects;
+    }
+
+    public Thread getOriginThread() {
+        return originThread;
     }
 }
