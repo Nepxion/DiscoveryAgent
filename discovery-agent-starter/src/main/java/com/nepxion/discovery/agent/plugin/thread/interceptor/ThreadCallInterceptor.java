@@ -21,7 +21,8 @@ public class ThreadCallInterceptor {
             if (null == asyncContext) {
                 return;
             }
-            //Avoid calling in the same thread.
+
+            // Avoid calling in the same thread
             if (asyncContext.getOriginThread().equals(Thread.currentThread())) {
                 return;
             }
@@ -37,10 +38,12 @@ public class ThreadCallInterceptor {
             if (null == asyncContext) {
                 return;
             }
-            //Avoid calling in the same thread.
+
+            // Avoid calling in the same thread
             if (asyncContext.getOriginThread().equals(Thread.currentThread())) {
                 return;
             }
+
             ThreadLocalCopier.after();
         }
     }
