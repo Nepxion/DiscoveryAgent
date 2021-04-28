@@ -154,7 +154,7 @@ agent.plugin.thread.scan.packages=reactor.core.publisher;org.springframework.aop
 ```
 
 基准扫描目录，含义如下
-- WebFlux Reactor异步场景下的扫描目录对应为reactor.core.publisher，可以解决基于Reactor的Spring Cloud LoadBalancer异步负载均衡下的上下文传递
+- WebFlux Reactor异步场景下的扫描目录对应为reactor.core.publisher
 - `@`Async场景下的扫描目录对应为org.springframework.aop.interceptor
 - Hystrix线程池隔离场景下的扫描目录对应为com.netflix.hystrix
 
