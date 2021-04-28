@@ -159,7 +159,9 @@ agent.plugin.thread.scan.packages=reactor.core.publisher;org.springframework.aop
 - Hystrix线程池隔离场景下的扫描目录对应为com.netflix.hystrix
 
 ③ plugin/discovery-agent-starter-plugin-strategy-`$`{discovery.version}.jar插件，解决Nepxion Discovery上下文异步场景
+
 ④ plugin/discovery-agent-starter-plugin-mdc-`$`{discovery.version}.jar插件，解决SLF4J MDC日志上下文异步场景
+
 ⑤ 业务系统可以自定义plugin，解决业务自己定义的上下文异步场景
 
 #### 异步跨线程DiscoveryAgent使用
