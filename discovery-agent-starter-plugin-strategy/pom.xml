@@ -15,8 +15,6 @@
     </parent>
 
     <properties>
-        <discovery.version>6.10.0</discovery.version>
-
         <agent.package.dest.dir>${project.build.directory}/../../discovery-agent</agent.package.dest.dir>
         <plugin.dest.dir>${agent.package.dest.dir}/plugin</plugin.dest.dir>
     </properties>
@@ -31,21 +29,18 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>discovery-plugin-strategy-starter-service</artifactId>
-            <version>${discovery.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>discovery-plugin-strategy-starter-zuul</artifactId>
-            <version>${discovery.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>discovery-plugin-strategy-starter-gateway</artifactId>
-            <version>${discovery.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

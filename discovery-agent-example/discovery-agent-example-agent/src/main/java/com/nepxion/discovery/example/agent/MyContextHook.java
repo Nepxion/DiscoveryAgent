@@ -21,6 +21,7 @@ public class MyContextHook extends AbstractThreadLocalHook {
         return MyContext.getCurrentContext().getAttributes();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void before(Object object) {
         // 把create方法里获取到的上下文对象放置到子线程的ThreadLocal里

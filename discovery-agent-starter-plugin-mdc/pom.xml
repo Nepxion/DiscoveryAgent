@@ -15,8 +15,6 @@
     </parent>
 
     <properties>
-        <slf4j.version>1.7.30</slf4j.version>
-
         <agent.package.dest.dir>${project.build.directory}/../../discovery-agent</agent.package.dest.dir>
         <plugin.dest.dir>${agent.package.dest.dir}/plugin</plugin.dest.dir>
     </properties>
@@ -31,7 +29,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
