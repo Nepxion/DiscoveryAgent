@@ -1,4 +1,4 @@
-package com.nepxion.discovery.agent;
+package com.nepxion.discovery.agent.constant;
 
 /**
  * <p>Title: Nepxion Discovery</p>
@@ -10,7 +10,7 @@ package com.nepxion.discovery.agent;
  */
 
 public class DiscoveryAgentConstant {
-    public static final String DISCOVERY_AGENT_VERSION = "1.0.3";
+    public static final String DISCOVERY_AGENT_VERSION = "1.1.0";
 
     public static final String SPRING_APPLICATION_DISCOVERY_AGENT_VERSION = "spring.application.discovery.agent.version";
 }

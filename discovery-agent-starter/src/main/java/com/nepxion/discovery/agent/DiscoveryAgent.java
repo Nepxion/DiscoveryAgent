@@ -12,6 +12,7 @@ package com.nepxion.discovery.agent;
 import java.lang.instrument.Instrumentation;
 
 import com.nepxion.discovery.agent.callback.TransformTemplate;
+import com.nepxion.discovery.agent.constant.DiscoveryAgentConstant;
 import com.nepxion.discovery.agent.logger.AgentLogger;
 import com.nepxion.discovery.agent.plugin.PluginFinder;
 import com.nepxion.discovery.agent.transformer.DispatcherClassFileTransformer;
