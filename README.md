@@ -125,6 +125,10 @@ Polaris为Discovery高级定制版，特色功能
 
 ![](http://nepxion.gitee.io/discovery/docs/polaris-doc/GlobalSub.jpg)
 
+⑧ Discovery【探索】配置中心发布订阅图
+
+![](http://nepxion.gitee.io/discovery/docs/polaris-doc/Config.jpg)
+
 ## 异步场景下Discovery和DiscoveryAgent
 Discovery框架存在着如下全链路传递上下文的场景，包括
 - 策略路由Header全链路从网关传递到服务
