@@ -64,6 +64,6 @@ public class AgentPath {
         }
 
         LOG.warn("Can not locate agent jar file");
-        throw new RuntimeException("Can not locate agent jar file");
+        throw new IllegalArgumentException("Can not locate agent jar file");
     }
 }

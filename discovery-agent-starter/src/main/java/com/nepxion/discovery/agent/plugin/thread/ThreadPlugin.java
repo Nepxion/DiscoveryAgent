@@ -109,7 +109,7 @@ public class ThreadPlugin extends Plugin {
 
             Method[] methods = clazz.getDeclaredMethods();
             if (methods.length != 2) {
-                throw new RuntimeException("accessorType has to declare 2 methods. " + clazz.getName() + " has " + methods.length);
+                throw new IllegalArgumentException("accessorType has to declare 2 methods. " + clazz.getName() + " has " + methods.length);
             }
 
             Method getter;

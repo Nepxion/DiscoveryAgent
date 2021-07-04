@@ -89,7 +89,7 @@ public class PluginFinder {
 
             return Arrays.asList(jarURLArray);
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new IllegalArgumentException(e.getMessage(), e);
         }
     }
 
@@ -98,7 +98,7 @@ public class PluginFinder {
             return FileUtil.toURL(file);
         } catch (IOException e) {
             LOG.warn(file.getName() + ".toURL() failed.", e);
-            throw new RuntimeException(file.getName() + ".toURL() failed.", e);
+            throw new IllegalArgumentException(file.getName() + ".toURL() failed.", e);
         }
     }
 }
