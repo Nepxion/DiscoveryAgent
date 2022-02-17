@@ -52,7 +52,6 @@ public class ThreadPlugin extends Plugin {
 
         List<String> basePackages = StringUtil.tokenizeToStringList(baseThreadScanPackages, ThreadConstant.THREAD_SCAN_PACKAGES_DELIMITERS);
         List<String> customPackages = StringUtil.tokenizeToStringList(threadScanPackages, ThreadConstant.THREAD_SCAN_PACKAGES_DELIMITERS);
-        basePackages.addAll(customPackages);
         HashSet<String> scanPackages = new HashSet<>();
         scanPackages.addAll(basePackages);
         scanPackages.addAll(customPackages);
