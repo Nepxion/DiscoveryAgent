@@ -10,7 +10,7 @@ package com.nepxion.discovery.agent.constant;
  */
 
 public class DiscoveryAgentConstant {
-    public static final String DISCOVERY_AGENT_VERSION = "1.1.0";
+    public static final String DISCOVERY_AGENT_VERSION = "1.2.0";
 
     public static final String SPRING_APPLICATION_DISCOVERY_AGENT_VERSION = "spring.application.discovery.agent.version";
 }
