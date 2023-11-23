@@ -61,11 +61,14 @@ public class ThreadPlugin extends Plugin {
 
         RunnableTransformCallback runnableTransformCallback = new RunnableTransformCallback();
         CallableTransformCallback callableTransformCallback = new CallableTransformCallback();
+        SupplierTransformCallback supplierTransformCallback = new SupplierTransformCallback();
         for (String basePackage : scanPackages) {
             MatcherOperator runnableInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(basePackage, ThreadConstant.RUNNABLE_CLASS_NAME);
             MatcherOperator callableInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(basePackage, ThreadConstant.CALLABLE_CLASS_NAME);
+            MatcherOperator supplierInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(basePackage, ThreadConstant.SUPPLIER_CLASS_NAME);
             transformTemplate.transform(runnableInterfaceMatcherOperator, runnableTransformCallback);
             transformTemplate.transform(callableInterfaceMatcherOperator, callableTransformCallback);
+            transformTemplate.transform(supplierInterfaceMatcherOperator, supplierTransformCallback);
         }
 
         LOG.info(String.format("%s install successfully", this.getClass().getSimpleName()));
@@ -169,4 +172,34 @@ public class ThreadPlugin extends Plugin {
             }
         }
     }
+
+    public static class SupplierTransformCallback implements TransformCallback {
+        @Override
+        public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
+            try {
+                ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
+                CtClass ctClass = classInfo.getCtClass();
+
+                addField(ctClass, AsyncContextAccessor.class);
+
+                CtConstructor[] declaredConstructors = ctClass.getDeclaredConstructors();
+                for (CtConstructor ctConstructor : declaredConstructors) {
+                    ctConstructor.insertAfter(ThreadConstant.CONSTRUCTOR_INTERCEPTOR);
+                }
+
+                CtMethod ctMethod = ctClass.getDeclaredMethod("get");
+                if (null != ctMethod) {
+                    ctMethod.insertBefore(ThreadConstant.RUN_BEFORE_INTERCEPTOR);
+                    ctMethod.insertAfter(ThreadConstant.RUN_AFTER_INTERCEPTOR);
+                }
+
+                return ctClass.toBytecode();
+            } catch (Exception e) {
+                LOG.warn(String.format("Transform %s error, message:", className), e);
+
+                return null;
+            }
+        }
+    }
+
 }
