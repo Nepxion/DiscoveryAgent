@@ -17,8 +17,11 @@ public class ThreadConstant {
     public static final String THREAD_SCAN_PACKAGES = "thread.scan.packages";
     public static final String THREAD_REQUEST_DECORATOR_ENABLED = "thread.request.decorator.enabled";
     public static final String RUNNABLE_CLASS_NAME = "java.lang.Runnable";
+    public static final String RUNNABLE_IMPL_METHOD_NAME = "run";
     public static final String CALLABLE_CLASS_NAME = "java.util.concurrent.Callable";
+    public static final String CALLABLE_IMPL_METHOD_NAME = "call";
     public static final String SUPPLIER_CLASS_NAME = "java.util.function.Supplier";
+    public static final String SUPPLIER_IMPL_METHOD_NAME = "get";
 
     public static final String THREAD_SCAN_PACKAGES_DELIMITERS = ";";
     public static final String CONSTRUCTOR_INTERCEPTOR = String.format("%s.before(this);\n", ThreadConstructorInterceptor.class.getName());
