@@ -8,28 +8,16 @@ package com.nepxion.discovery.agent.plugin.thread;
  * @author zifeihan
  * @version 1.0
  */
-
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMethod;
-
-import java.lang.reflect.Method;
-import java.security.ProtectionDomain;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
-import com.nepxion.discovery.agent.async.AsyncContextAccessor;
-import com.nepxion.discovery.agent.callback.TransformCallback;
 import com.nepxion.discovery.agent.callback.TransformTemplate;
 import com.nepxion.discovery.agent.config.Config;
 import com.nepxion.discovery.agent.logger.AgentLogger;
 import com.nepxion.discovery.agent.matcher.MatcherFactory;
 import com.nepxion.discovery.agent.matcher.MatcherOperator;
 import com.nepxion.discovery.agent.plugin.Plugin;
-import com.nepxion.discovery.agent.util.ClassInfo;
 import com.nepxion.discovery.agent.util.StringUtil;
 
 public class ThreadPlugin extends Plugin {
@@ -61,112 +49,39 @@ public class ThreadPlugin extends Plugin {
 
         RunnableTransformCallback runnableTransformCallback = new RunnableTransformCallback();
         CallableTransformCallback callableTransformCallback = new CallableTransformCallback();
+        SupplierTransformCallback supplierTransformCallback = new SupplierTransformCallback();
         for (String basePackage : scanPackages) {
             MatcherOperator runnableInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(basePackage, ThreadConstant.RUNNABLE_CLASS_NAME);
             MatcherOperator callableInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(basePackage, ThreadConstant.CALLABLE_CLASS_NAME);
+            MatcherOperator supplierInterfaceMatcherOperator = MatcherFactory.newPackageBasedMatcher(basePackage, ThreadConstant.SUPPLIER_CLASS_NAME);
             transformTemplate.transform(runnableInterfaceMatcherOperator, runnableTransformCallback);
             transformTemplate.transform(callableInterfaceMatcherOperator, callableTransformCallback);
+            transformTemplate.transform(supplierInterfaceMatcherOperator, supplierTransformCallback);
         }
 
         LOG.info(String.format("%s install successfully", this.getClass().getSimpleName()));
     }
 
-    public static class RunnableTransformCallback implements TransformCallback {
+    public static class RunnableTransformCallback extends ThreadTransformCallback {
         @Override
-        public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
-            try {
-                ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
-                CtClass ctClass = classInfo.getCtClass();
-
-                addField(ctClass, AsyncContextAccessor.class);
-
-                CtConstructor[] declaredConstructors = ctClass.getDeclaredConstructors();
-                for (CtConstructor ctConstructor : declaredConstructors) {
-                    ctConstructor.insertAfter(ThreadConstant.CONSTRUCTOR_INTERCEPTOR);
-                }
-
-                CtMethod ctMethod = ctClass.getDeclaredMethod("run");
-                if (null != ctMethod) {
-                    ctMethod.insertBefore(ThreadConstant.RUN_BEFORE_INTERCEPTOR);
-                    ctMethod.insertAfter(ThreadConstant.RUN_AFTER_INTERCEPTOR);
-                }
-
-                return ctClass.toBytecode();
-            } catch (Exception e) {
-                LOG.warn(String.format("Transform %s error,message:", className), e);
-
-                return null;
-            }
+        public String getImplMethodName() {
+            return ThreadConstant.RUNNABLE_IMPL_METHOD_NAME;
         }
     }
 
-    public static void addField(CtClass ctClass, Class<?> clazz) {
-        try {
-            ClassPool aDefault = ClassPool.getDefault();
-            CtClass makeInterface = aDefault.makeInterface(clazz.getName());
-            ctClass.addInterface(makeInterface);
+    public static class CallableTransformCallback extends ThreadTransformCallback {
 
-            Method[] methods = clazz.getDeclaredMethods();
-            if (methods.length != 2) {
-                throw new IllegalArgumentException("accessorType has to declare 2 methods. " + clazz.getName() + " has " + methods.length);
-            }
-
-            Method getter;
-            Method setter;
-
-            if (methods[0].getParameterTypes().length == 0) {
-                getter = methods[0];
-                setter = methods[1];
-            } else {
-                getter = methods[1];
-                setter = methods[0];
-            }
-
-            Class<?> fieldType = getter.getReturnType();
-            String fieldName = fieldType.getSimpleName().toLowerCase();
-            String field = String.format("private %s %s;", fieldType.getName(), fieldName);
-
-            CtField f1 = CtField.make(field, ctClass);
-            ctClass.addField(f1);
-
-            String getMethod = String.format("public %s %s(){return %s;}", fieldType.getName(), getter.getName(), fieldName);
-            String setMethod = String.format("public void %s(%s %s){this.%s = %s;}", setter.getName(), fieldType.getName(), fieldName, fieldName, fieldName);
-
-            CtMethod m1 = CtMethod.make(getMethod, ctClass);
-            CtMethod m2 = CtMethod.make(setMethod, ctClass);
-            ctClass.addMethod(m1);
-            ctClass.addMethod(m2);
-        } catch (Exception e) {
-            LOG.warn(String.format("Add field %s error, message:", clazz.getName()), e);
+        @Override
+        public String getImplMethodName() {
+            return ThreadConstant.CALLABLE_IMPL_METHOD_NAME;
         }
     }
 
-    public static class CallableTransformCallback implements TransformCallback {
+    public static class SupplierTransformCallback extends ThreadTransformCallback {
+
         @Override
-        public byte[] doInTransform(ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
-            try {
-                ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
-                CtClass ctClass = classInfo.getCtClass();
-
-                addField(ctClass, AsyncContextAccessor.class);
-
-                CtConstructor[] declaredConstructors = ctClass.getDeclaredConstructors();
-                for (CtConstructor ctConstructor : declaredConstructors) {
-                    ctConstructor.insertAfter(ThreadConstant.CONSTRUCTOR_INTERCEPTOR);
-                }
-
-                CtMethod ctMethod = ctClass.getDeclaredMethod("call");
-                if (null != ctMethod) {
-                    ctMethod.insertBefore(ThreadConstant.RUN_BEFORE_INTERCEPTOR);
-                    ctMethod.insertAfter(ThreadConstant.RUN_AFTER_INTERCEPTOR);
-                }
-
-                return ctClass.toBytecode();
-            } catch (Exception e) {
-                LOG.warn(String.format("Transform %s error, message:", className), e);
-
-                return null;
-            }
+        public String getImplMethodName() {
+            return ThreadConstant.SUPPLIER_IMPL_METHOD_NAME;
         }
     }
 }
