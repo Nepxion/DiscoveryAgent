@@ -11,6 +11,7 @@ package com.nepxion.discovery.agent.plugin.spring.async;
 
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.Modifier;
 
 import java.security.ProtectionDomain;
 
@@ -37,10 +38,14 @@ public class SpringAsyncPlugin extends Plugin {
                 try {
                     ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
                     CtClass ctClass = classInfo.getCtClass();
-                    CtMethod method = ctClass.getMethod("doSubmit", "(Ljava/util/concurrent/Callable;Lorg/springframework/core/task/AsyncTaskExecutor;Ljava/lang/Class;)Ljava/lang/Object;");
-                    if (null != method) {
+                    if (ctClass.isInterface()) {
+                        return null;
+                    }
+
+                    CtMethod ctMethod = ctClass.getMethod("doSubmit", "(Ljava/util/concurrent/Callable;Lorg/springframework/core/task/AsyncTaskExecutor;Ljava/lang/Class;)Ljava/lang/Object;");
+                    if (null != ctMethod && !Modifier.isNative(ctMethod.getModifiers()) && !Modifier.isAbstract(ctMethod.getModifiers())) {
                         StringBuffer sb = new StringBuffer();
-                        CtClass[] parameterTypes = method.getParameterTypes();
+                        CtClass[] parameterTypes = ctMethod.getParameterTypes();
                         for (int i = 0; i < parameterTypes.length; i++) {
                             final String paramTypeName = parameterTypes[i].getName();
                             if (CALLABLE_CLASS_NAME.equals(paramTypeName)) {
@@ -49,7 +54,7 @@ public class SpringAsyncPlugin extends Plugin {
                         }
 
                         if (sb.length() > 0) {
-                            method.insertBefore(sb.toString());
+                            ctMethod.insertBefore(sb.toString());
                         }
                     }
 

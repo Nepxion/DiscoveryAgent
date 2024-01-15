@@ -14,6 +14,7 @@ import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
+import javassist.Modifier;
 
 import java.lang.reflect.Method;
 import java.security.ProtectionDomain;
@@ -31,6 +32,9 @@ public abstract class ThreadTransformCallback implements TransformCallback {
         try {
             ClassInfo classInfo = new ClassInfo(className, classfileBuffer, classLoader);
             CtClass ctClass = classInfo.getCtClass();
+            if (ctClass.isInterface()) {
+                return null;
+            }
 
             addField(ctClass, AsyncContextAccessor.class);
 
@@ -41,7 +45,7 @@ public abstract class ThreadTransformCallback implements TransformCallback {
 
             String implMethodName = getImplMethodName();
             CtMethod ctMethod = ctClass.getDeclaredMethod(implMethodName);
-            if (null != ctMethod) {
+            if (null != ctMethod && !Modifier.isNative(ctMethod.getModifiers()) && !Modifier.isAbstract(ctMethod.getModifiers())) {
                 ctMethod.insertBefore(ThreadConstant.RUN_BEFORE_INTERCEPTOR);
                 ctMethod.insertAfter(ThreadConstant.RUN_AFTER_INTERCEPTOR);
             }
