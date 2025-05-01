@@ -47,6 +47,7 @@ public class PluginFinder {
     public static List<URL> getPlugin() {
         File agentDictionary = AgentPath.getPath();
         File plugins = new File(agentDictionary, "plugin");
+
         LOG.info("Agent plugin directory:" + plugins.getAbsolutePath());
 
         return resolveLib(plugins.getAbsolutePath());
@@ -57,6 +58,7 @@ public class PluginFinder {
         if (checkDirectory(libDir)) {
             return Collections.emptyList();
         }
+
         final File[] libFileList = FileUtil.listFiles(libDir, new String[] { ".jar" });
 
         List<URL> libURLList = toURLs(libFileList);
@@ -70,12 +72,13 @@ public class PluginFinder {
 
     private static boolean checkDirectory(File file) {
         if (!file.exists()) {
-            LOG.warn(file + " not found");
+            LOG.warn(file + " is not found or check if you have permission to access it");
 
             return true;
         }
+
         if (!file.isDirectory()) {
-            LOG.warn(file + " is not a directory");
+            LOG.warn(file + " is not a directory or check if you have permission to access it");
 
             return true;
         }
@@ -98,6 +101,7 @@ public class PluginFinder {
             return FileUtil.toURL(file);
         } catch (IOException e) {
             LOG.warn(file.getName() + ".toURL() failed.", e);
+
             throw new IllegalArgumentException(file.getName() + ".toURL() failed.", e);
         }
     }

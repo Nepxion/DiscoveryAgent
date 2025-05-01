@@ -73,6 +73,20 @@ public class AgentLogger {
         printStream.println(formatMessage);
     }
 
+    public boolean isErrorEnabled() {
+        return true;
+    }
+
+    public void error(String msg) {
+        error(msg, null);
+    }
+
+    public void error(String msg, Throwable throwable) {
+        String exceptionMessage = toString(throwable);
+        String formatMessage = format("ERROR", msg, exceptionMessage);
+        printStream.println(formatMessage);
+    }
+
     private String toString(Throwable throwable) {
         if (throwable == null) {
             return "";

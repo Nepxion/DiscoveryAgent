@@ -32,7 +32,7 @@ public enum Config {
         try (final InputStreamReader configFileStream = loadConfig()) {
             config.load(configFileStream);
         } catch (Exception e) {
-            LOGGER.warn("Failed to read the config file, will ignore config file");
+            LOGGER.warn("Failed to read the config file, ignore it");
         }
     }
 
@@ -41,7 +41,7 @@ public enum Config {
 
         if (configFile.exists() && configFile.isFile()) {
             try {
-                LOGGER.info(String.format("Config file found in %s.", configFile));
+                LOGGER.info(String.format("Config file found in %s", configFile));
 
                 return new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8);
             } catch (FileNotFoundException e) {
