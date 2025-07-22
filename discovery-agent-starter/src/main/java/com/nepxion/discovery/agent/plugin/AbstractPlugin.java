@@ -45,6 +45,16 @@ public abstract class AbstractPlugin extends Plugin {
         });
     }
 
+    protected boolean isAllowed() {
+        try {
+            Class.forName(getMatcherClassName());
+
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
     protected abstract String getMatcherClassName();
 
     protected abstract String getHookClassName();

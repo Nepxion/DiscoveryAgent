@@ -8,6 +8,7 @@ package com.nepxion.discovery.agent.plugin.thread;
  * @author zifeihan
  * @version 1.0
  */
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -70,7 +71,6 @@ public class ThreadPlugin extends Plugin {
     }
 
     public static class CallableTransformCallback extends ThreadTransformCallback {
-
         @Override
         public String getImplMethodName() {
             return ThreadConstant.CALLABLE_IMPL_METHOD_NAME;
@@ -78,7 +78,6 @@ public class ThreadPlugin extends Plugin {
     }
 
     public static class SupplierTransformCallback extends ThreadTransformCallback {
-
         @Override
         public String getImplMethodName() {
             return ThreadConstant.SUPPLIER_IMPL_METHOD_NAME;
