@@ -35,13 +35,11 @@ public class PluginFinder {
         ClassLoader classLoader = URLClassLoaderFactory.createClassLoader("discovery.agent", pluginUrls, PluginFinder.class.getClassLoader());
         List<Plugin> loadPlugins = PluginLoader.load(classLoader, Plugin.class);
         for (Plugin plugin : loadPlugins) {
-            if (plugin.isAllowed()) {
-                if (plugin.isEnabled()) {
-                    plugin.install(transformTemplate);
-                    LOG.info(String.format("%s install successfully", plugin.getClass().getSimpleName()));
-                } else {
-                    LOG.info(String.format("%s disable to install", plugin.getClass().getSimpleName()));
-                }
+            if (plugin.isEnabled()) {
+                plugin.install(transformTemplate);
+                LOG.info(String.format("%s install successfully", plugin.getClass().getSimpleName()));
+            } else {
+                LOG.info(String.format("%s disable to install", plugin.getClass().getSimpleName()));
             }
         }
     }
